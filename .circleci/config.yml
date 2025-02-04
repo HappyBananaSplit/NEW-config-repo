@@ -7,8 +7,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: cat README
+          name: print-readme-of-checkout-repo
           command: cat README.md
+      - run:
+          name: config-repo
+          command: echo "This config is defined in NEW-config-repo"
 
 
 workflows:
