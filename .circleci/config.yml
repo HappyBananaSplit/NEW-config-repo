@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  NEW-config-repo:
+  config-job-1:
     docker:
       - image: cimg/node:17.9.1
     steps:
@@ -15,6 +15,6 @@ jobs:
 
 
 workflows:
-  NEW-config-repo:
+  config-workflow-1:
     jobs:
-      - shared-config-job
+      - config-job-1
