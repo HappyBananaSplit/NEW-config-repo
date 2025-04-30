@@ -1,17 +1,20 @@
 version: 2.1
 
 jobs:
-  shared-config-job:
+  config-job-1:
     docker:
       - image: cimg/node:17.9.1
     steps:
       - checkout
       - run:
-          name: cat README
+          name: print-readme-of-checkout-repo
           command: cat README.md
+      - run:
+          name: config-repo
+          command: echo "This config is defined in NEW-config-repo"
 
 
 workflows:
-  shared-config-repo:
+  config-workflow-1:
     jobs:
-      - shared-config-job
+      - config-job-1
