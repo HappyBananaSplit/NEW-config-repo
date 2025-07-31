@@ -1,0 +1,18 @@
+version: 2.1
+
+jobs:
+  my-job:
+    docker:
+      - image: cimg/node:17.2.0
+    steps:
+      - run: echo "PIPELINE RUN"
+      - run: echo "<<pipeline.event.github.ref>>"
+
+workflows:
+  my-workflow:
+    when: 
+      matches:
+        pattern: ^refs/tags/v\d+\.\d+\.\d+$
+        value: << pipeline.event.github.ref >>
+    jobs:
+      - my-job
