@@ -1,16 +1,25 @@
 version: 2.1
 
+# parameters:
+#   workflow-filter-based-only-on-parameters:
+#     type: boolean
+#     default: false
+#   enum-parameter:
+#     type: enum
+#     values: ["one", "two", "three"]
+#     default: "two"
+#   string-parameter:
+#     type: string
+#     default: "this-is-a-string"
+
 parameters:
-  workflow-filter-based-only-on-parameters:
-    type: boolean
-    default: false
-  enum-parameter:
-    type: enum
-    values: ["one", "two", "three"]
-    default: "two"
-  string-parameter:
+  image-tag:
     type: string
-    default: "this-is-a-string"
+    default: "current"
+  and-another:
+    type: enum
+    default: "env-c"
+    enum: ["env-a", "env-b", "env-c", "env-d"]
     
 jobs:
   shared-config-job:
