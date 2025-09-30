@@ -1,5 +1,17 @@
 version: 2.1
 
+parameters:
+  workflow-filter-based-only-on-parameters:
+    type: boolean
+    default: false
+  enum-parameter:
+    type: enum
+    values: ["one", "two", "three"]
+    default: "two"
+  string-parameter:
+    type: string
+    default: "this-is-a-string"
+    
 jobs:
   shared-config-job:
     docker:
