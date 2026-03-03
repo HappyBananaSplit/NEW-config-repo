@@ -49,7 +49,7 @@ jobs:
 workflows:
   validate-library-integration:
     jobs:
-      - test-with-library:
+      - test-with-library
           # filters:
           #   tags:
           #     only: /.*/
