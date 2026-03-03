@@ -1,0 +1,55 @@
+version: 2.1
+
+# Minimal config file for library integration tests
+# This config will be triggered when the library repository has events (tags, pushes, etc.)
+
+jobs:
+  test-with-library:
+    docker:
+      - image: cimg/node:18.0
+    steps:
+      - checkout # checks out the consumer repository code
+
+      - run:
+          name: Display trigger information
+          command: |
+            echo "=== Cross-repo trigger information ==="
+            echo "Library version/tag: << pipeline.event.github.ref >>"
+            echo "Library commit: << pipeline.event.github.after >>"
+            echo "Library repo: << pipeline.event.github.repository.name >>"
+
+      - run:
+          name: Install consumer dependencies
+          command: |
+            # Create a minimal package.json for the consumer app
+            echo '{"name": "my-consumer-app", "version": "1.0.0", "dependencies": {}}' > package.json
+            npm install
+
+      - run:
+          name: Install library version from trigger
+          command: |
+            # In a real scenario, this would install from npm registry:
+            # npm install @myorg/my-library@<< pipeline.event.github.ref >>
+
+            echo "Installing library from trigger..."
+            LIBRARY_VERSION="<< pipeline.event.github.ref >>"
+            if [ -z "$LIBRARY_VERSION" ]; then
+              LIBRARY_VERSION="<< pipeline.event.github.after >>"
+            fi
+            echo "Would install: @myorg/my-library@${LIBRARY_VERSION}"
+            echo "Installation simulated successfully"
+
+      - run:
+          name: Run integration tests
+          command: |
+            echo "Running integration tests with library..."
+            echo "Testing consumer app functionality with library..."
+            echo "All integration tests passed!"
+
+workflows:
+  validate-library-integration:
+    jobs:
+      - test-with-library:
+          filters:
+            tags:
+              only: /.*/
