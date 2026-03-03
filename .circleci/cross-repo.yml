@@ -1,4 +1,5 @@
-version: 2.1
+Here's the full updated config:
+yamlversion: 2.1
 
 # Minimal config file for library integration tests
 # This config will be triggered when the library repository has events (tags, pushes, etc.)
@@ -14,7 +15,9 @@ jobs:
           name: Display trigger information
           command: |
             echo "=== Cross-repo trigger information ==="
-            echo "Library version/tag: << pipeline.event.github.ref >>"
+            RAW_REF="<< pipeline.event.github.ref >>"
+            LIBRARY_VERSION="${RAW_REF#refs/tags/}"
+            echo "Library version/tag: ${LIBRARY_VERSION}"
             echo "Library commit: << pipeline.event.github.after >>"
             echo "Library repo: << pipeline.event.github.repository.name >>"
 
@@ -28,14 +31,17 @@ jobs:
       - run:
           name: Install library version from trigger
           command: |
-            # In a real scenario, this would install from npm registry:
-            # npm install @myorg/my-library@<< pipeline.event.github.ref >>
-
             echo "Installing library from trigger..."
-            LIBRARY_VERSION="<< pipeline.event.github.ref >>"
-            if [ -z "$LIBRARY_VERSION" ]; then
+            RAW_REF="<< pipeline.event.github.ref >>"
+
+            # Strip refs/tags/ or refs/heads/ prefix
+            LIBRARY_VERSION="${RAW_REF#refs/tags/}"
+
+            if [ -z "$LIBRARY_VERSION" ] || [ "$LIBRARY_VERSION" = "$RAW_REF" ]; then
+              # Fallback if ref wasn't a tag
               LIBRARY_VERSION="<< pipeline.event.github.after >>"
             fi
+
             echo "Would install: @myorg/my-library@${LIBRARY_VERSION}"
             echo "Installation simulated successfully"
 
@@ -50,6 +56,3 @@ workflows:
   validate-library-integration:
     jobs:
       - test-with-library
-          # filters:
-          #   tags:
-          #     only: /.*/
