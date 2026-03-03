@@ -1,5 +1,4 @@
-Here's the full updated config:
-yamlversion: 2.1
+version: 2.1
 
 # Minimal config file for library integration tests
 # This config will be triggered when the library repository has events (tags, pushes, etc.)
